@@ -19,17 +19,32 @@ storyboard.removeAll()
 -- Called when the scene's view does not exist:
 function scene:createScene( event )
   local group = self.view
-  local title = display.newText( "A Delightful Change!", 250, 75 )
-  title.x = 159
-  title.y = 93
-  group:insert(title)
+  print(globals.Archistico)
+  local title1 = display.newText( "A", 250, 75, globals.Archistico, 48 )
+  title1:setFillColor(0,0.392157,0)
+  title1.x = 159
+  title1.y = 33
+  group:insert(title1)
+  
+  local title2 = display.newText( "Delightful", 250, 75, globals.Archistico, 48 )
+  title2:setFillColor(0,0.392157,0)
+  title2.x = 159
+  title2.y = 73
+  group:insert(title2)
 
+  local title3 = display.newText( "Change!", 250, 75, globals.Archistico, 48 )
+  title3:setFillColor(0,0.392157,0)
+  title3.x = 159
+  title3.y = 113
+  group:insert(title3)
+  
   local world = display.newImageRect( "images/world.jpg", 150, 150 )
   world.x = 162
   world.y = 230
   group:insert(world)
 
-  local quests = display.newText( "Quests!", 158, 54 )
+  local quests = display.newText( "Quests!", 158, 54, globals.Aaargh, 36 )
+  quests:setFillColor(0.2509,0.7529,0.7960)
   quests.x = 161
   quests.y = 387
   group:insert(quests)

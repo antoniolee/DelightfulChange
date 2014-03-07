@@ -6,6 +6,8 @@
 local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
 local widget = require( "widget" )
+local globals = require("classes.globals")
+require("classes.myQuests")
  
 -- Clear previous scene
 storyboard.removeAll()
@@ -23,12 +25,12 @@ function scene:createScene( event )
   local titleOptions = {
     text = "Quests!",
     x = 160,
-    y = 90,   
-    font = native.systemFont,
-    fontSize = 24
+    y = 70,   
+    font = globals.Archistico,
+    fontSize = 48
   }
-
   local title = display.newText(titleOptions)
+  title:setFillColor(0,0.392157,0)
   group:insert(title)
 
   local function scrollListener( event )
@@ -63,8 +65,25 @@ function scene:createScene( event )
     listener = scrollListener
   }
   group:insert(scrollView)
-
-
+	local questToDo = {}
+	local myY = 0
+	for i = 0,table.maxn( globals.questList ) do
+		  questToDo[i] = display.newText( globals.questList[i].name, 0, 0, globals.IMPRIMA, 18 )
+		  questToDo[i].anchorX = 0
+		  --questToDo[i]:setFillColor(white)
+		  questToDo[i].x = 20--scrollView.contentBounds.xMin
+		  questToDo[i].y = myY
+		  questToDo[i].id = i
+		  questToDo[i].name = globals.questList[i].name
+		  questToDo[i].image = globals.questList[i].image
+		  questToDo[i].description = globals.questList[i].description
+		  questToDo[i].toUse = globals.questList[i].toUse
+		  questToDo[i].lockLevel = globals.questList[i].lockLevel
+		  questToDo[i].cost = globals.questList[i].cost
+		  scrollView:insert( questToDo[i] )
+		  myY=myY+35
+		  --questToDo[i]:addEventListener( "tap", onTapUnlockedItem )
+	end
 
   local quests = display.newText( "Quests!", 158, 54 )
   quests.x = 161
