@@ -8,6 +8,11 @@ local storyboard = require ("storyboard")
 local globals = require ("classes.globals")
 display.setDefault( "background", .976, .949, .906 )
 
+centerX = display.contentCenterX
+centerY = display.contentCenterY
+_W = display.contentWidth
+_H = display.contentHeight
+
 local fonts = native.getFontNames()
 count = 0
 for i,fontname in ipairs(fonts) do

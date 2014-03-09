@@ -21,6 +21,7 @@ storyboard.removeAll()
 -- Called when the scene's view does not exist:
 function scene:createScene( event )
   local group = self.view
+
   local titleOptions = {
     text = "Quests!",
     x = 160,
@@ -31,11 +32,7 @@ function scene:createScene( event )
   local title = display.newText(titleOptions)
   title:setFillColor(0,0.392157,0)
   group:insert(title)
-  
-  local function questTap ( event )
-	storyboard.showOverlay( "scenes.QuestOverlay",{ effect = "fade", time = 500, params = {currentQuest = event.target}})
-  end
-  
+
   local function scrollListener( event )
 
     local phase = event.phase
@@ -85,7 +82,7 @@ function scene:createScene( event )
 		  questToDo[i].cost = globals.questList[i].cost
 		  scrollView:insert( questToDo[i] )
 		  myY=myY+35
-		  questToDo[i]:addEventListener( "tap", questTap )
+		  --questToDo[i]:addEventListener( "tap", onTapUnlockedItem )
 	end
 
   local quests = display.newText( "Quests!", 158, 54 )

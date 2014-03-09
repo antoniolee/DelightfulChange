@@ -21,85 +21,59 @@ storyboard.removeAll()
 -- Called when the scene's view does not exist:
 function scene:createScene( event )
   local group = self.view
-  local titleOptions = {
-    text = "Quests!",
-    x = 160,
-    y = 70,   
-    font = globals.Archistico,
-    fontSize = 48
-  }
-  local title = display.newText(titleOptions)
+  
+  local params = event.params
+  currentQuest = params.currentQuest
+  print(currentQuest.name)
+  local bkg = display.newRect( centerX, centerY, display.contentWidth, display.contentHeight )
+  bkg:setFillColor( gray )
+  bkg.alpha = .5
+  group:insert (bkg)
+
+  local titleBkg = display.newRect( centerX, centerY, display.contentWidth-40, display.contentHeight-200 )
+  group:insert (titleBkg)
+  
+  local title = display.newText( currentQuest.name, 250, 75, globals.Archistico, 26 )
   title:setFillColor(0,0.392157,0)
+  title.x = 159
+  title.y = 130
   group:insert(title)
   
-  local function questTap ( event )
-	storyboard.showOverlay( "scenes.QuestOverlay",{ effect = "fade", time = 500, params = {currentQuest = event.target}})
+ -- local content = display.newText( "Goal: " .. currentQuest.description, 250, 75, globals.Aaargh, 26 )
+  local content = display.newText( "Goal: " .. currentQuest.description, 165, 360, display.contentWidth-60, 400, globals.Aaargh, 18 )
+  content:setFillColor(0,0,0)
+  group:insert(content)
+  
+  local reward = display.newText( "Reward: ", 250, 75, globals.Aaargh, 18 )
+  reward:setFillColor(0,0,0)
+  reward.x = 165
+  reward.y = 270
+  group:insert(reward)
+  local function acceptTap ()
+	globals.questList[0].started = true
+	storyboard.hideOverlay()
   end
   
-  local function scrollListener( event )
-
-    local phase = event.phase
-    if ( phase == "began" ) then print( "Scroll view was touched" )
-    elseif ( phase == "moved" ) then print( "Scroll view was moved" )
-    elseif ( phase == "ended" ) then print( "Scroll view was released" )
-    end
-
-    -- In the event a scroll limit is reached...
-    if ( event.limitReached ) then
-      if ( event.direction == "up" ) then print( "Reached top limit" )
-      elseif ( event.direction == "down" ) then print( "Reached bottom limit" )
-      elseif ( event.direction == "left" ) then print( "Reached left limit" )
-      elseif ( event.direction == "right" ) then print( "Reached right limit" )
-      end
-    end
-
-    return true
+  local function completeTap ()
+	--globals.questList[0].started = true
+	storyboard.hideOverlay()
   end
-
-  local scrollView = widget.newScrollView{
-    y = 220,
-    x = display.contentCenterX,
-    width = 200,
-    height = 220,
-    topPadding = 20,
-    --hideBackground = true,
-    horizontalScrollDisabled = true,
-    backgroundColor = { 0.2, 0.2, 0.2 },
-    listener = scrollListener
-  }
-  group:insert(scrollView)
-	local questToDo = {}
-	local myY = 0
-	for i = 0,table.maxn( globals.questList ) do
-		  questToDo[i] = display.newText( globals.questList[i].name, 0, 0, globals.IMPRIMA, 18 )
-		  questToDo[i].anchorX = 0
-		  --questToDo[i]:setFillColor(white)
-		  questToDo[i].x = 20--scrollView.contentBounds.xMin
-		  questToDo[i].y = myY
-		  questToDo[i].id = i
-		  questToDo[i].name = globals.questList[i].name
-		  questToDo[i].image = globals.questList[i].image
-		  questToDo[i].description = globals.questList[i].description
-		  questToDo[i].toUse = globals.questList[i].toUse
-		  questToDo[i].lockLevel = globals.questList[i].lockLevel
-		  questToDo[i].cost = globals.questList[i].cost
-		  scrollView:insert( questToDo[i] )
-		  myY=myY+35
-		  questToDo[i]:addEventListener( "tap", questTap )
+  
+  if ( globals.questList[0].started == false ) then
+	  local accept = display.newText( "Accept", 250, 75, globals.Archistico, 26 )
+	  accept:setFillColor(0,0,0)
+	  accept.x = 165
+	  accept.y = 310
+	  accept:addEventListener( "tap", acceptTap )
+	  group:insert(accept)
+  else
+	  local complete = display.newText( "complete!", 250, 75, globals.Archistico, 26 )
+	  complete:setFillColor(0,0,0)
+	  complete.x = 165
+	  complete.y = 310
+	  complete:addEventListener( "tap", completeTap )
+	  group:insert(complete)
 	end
-
-  local quests = display.newText( "Quests!", 158, 54 )
-  quests.x = 161
-  quests.y = 387
-  group:insert(quests)
-
-  local function onTapQuests( event )
-    storyboard.removeScene( scene )
-    storyboard.gotoScene( "scenes.Quests",{ effect = "fade", time = 500,})
-  end
-
-  quests:addEventListener("tap", onTapQuests)
-
 end
  
 -- Called BEFORE scene has moved onscreen:
