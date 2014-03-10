@@ -1,11 +1,13 @@
----------------------------------------------------------------------------------
--- Home Screen
+ ---------------------------------------------------------------------------------
+-- Quests Screen
 -- Scene notes go here
 ---------------------------------------------------------------------------------
  
 local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
+local widget = require( "widget" )
 local globals = require("classes.globals")
+require("classes.myQuests")
  
 -- Clear previous scene
 storyboard.removeAll()
@@ -19,32 +21,76 @@ storyboard.removeAll()
 -- Called when the scene's view does not exist:
 function scene:createScene( event )
   local group = self.view
-  print(globals.Archistico)
-  local title1 = display.newText( "A", 250, 75, globals.Archistico, 48 )
-  title1:setFillColor(0,0.392157,0)
-  title1.x = 159
-  title1.y = 33
-  group:insert(title1)
   
-  local title2 = display.newText( "Delightful", 250, 75, globals.Archistico, 48 )
-  title2:setFillColor(0,0.392157,0)
-  title2.x = 159
-  title2.y = 73
-  group:insert(title2)
-
-  local title3 = display.newText( "Change!", 250, 75, globals.Archistico, 48 )
-  title3:setFillColor(0,0.392157,0)
-  title3.x = 159
-  title3.y = 113
-  group:insert(title3)
+  local function questTap ( event )
+	storyboard.showOverlay( "scenes.QuestOverlay",{ effect = "fade", time = 500, params = {currentQuest = event.target}})
+  end
   
-  local world = display.newImageRect( "images/world.jpg", 150, 150 )
-  world.x = 162
-  world.y = 230
-  group:insert(world)
+  local function scrollListener( event )
 
-  local quests = display.newText( "Quests!", 158, 54, globals.Aaargh, 36 )
-  quests:setFillColor(0.2509,0.7529,0.7960)
+    local phase = event.phase
+    if ( phase == "began" ) then print( "Scroll view was touched" )
+    elseif ( phase == "moved" ) then print( "Scroll view was moved" )
+    elseif ( phase == "ended" ) then print( "Scroll view was released" )
+    end
+
+    -- In the event a scroll limit is reached...
+    if ( event.limitReached ) then
+      if ( event.direction == "up" ) then print( "Reached top limit" )
+      elseif ( event.direction == "down" ) then print( "Reached bottom limit" )
+      elseif ( event.direction == "left" ) then print( "Reached left limit" )
+      elseif ( event.direction == "right" ) then print( "Reached right limit" )
+      end
+    end
+
+    return true
+  end
+
+  local scrollView = widget.newScrollView{
+    y = display.contentCenterY,
+    x = display.contentCenterX,
+    width =display.contentWidth,
+    height = display.contentHeight,
+	friction = 0,
+	--isLocked = true,
+    --hideBackground = true,
+    backgroundColor = { 0.2, 0.2, 0.2 },
+    listener = scrollListener
+  }
+  group:insert(scrollView)
+  local land = {}
+  local player
+  local function moveTo( event )
+	print( event.target.x )
+	print( event.target.y )
+	scrollView:scrollToPosition( { x = (event.target.x - display.contentWidth/2)*-1, y = (event.target.y -display.contentHeight/2)*-1} )
+	transition.to( player, { time=400, x=event.target.x ,y=event.target.y}  )
+  end
+	local myY = 25
+	--local i = 0
+	local n = 0
+	while myY<600 do
+		local myX = 25
+		while myX<600 do
+		  land[n] = display.newRect( myX, myY, 50, 50 )
+		  scrollView:insert( land[n] )
+		  myX=myX+50
+		  local random1 = math.random(0, 255)/255
+		  local random2 = math.random(0, 255)/255
+		  local random3 = math.random(0, 255)/255
+		  land[n]:setFillColor(random1,random2,random3)
+		  land[n]:addEventListener( "tap", moveTo )
+		  n = n +1
+		end
+		myY=myY+50
+		--i = i +1
+	end
+	player = display.newRect( 325, 325, 50, 50 )
+	player:setFillColor(0,0,0)
+	scrollView:insert( player )
+	
+--[[
+  local quests = display.newText( "Quests!", 158, 54 )
   quests.x = 161
   quests.y = 387
   group:insert(quests)
@@ -55,14 +101,7 @@ function scene:createScene( event )
   end
 
   quests:addEventListener("tap", onTapQuests)
-
-  local function onTapWorld( event )
-    storyboard.removeScene( scene )
-    storyboard.gotoScene( "scenes.InGame",{ effect = "fade", time = 500,})
-  end
-  
-  world:addEventListener("tap", onTapWorld)
-  
+]]
 end
  
 -- Called BEFORE scene has moved onscreen:

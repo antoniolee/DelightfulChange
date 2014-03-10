@@ -15,4 +15,4 @@ function Quest.makeQuest(name, id, questType, description, rewardIn, rewardOut, 
 	quest.started = false
 	return quest
 end
-globals.questList[0]= Quest.makeQuest("SAVE THE PLANET", 1, "Outside", "Go out into the awesome world and gather a new understanding for it and how it works!", 0,4,0)
+globals.questList[0]= Quest.makeQuest("SAVE THE PLANET", 0, "Outside", "Go out into the awesome world and gather a new understanding for it and how it works!", 0,4,0)
