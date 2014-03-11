@@ -43,14 +43,14 @@ function scene:createScene( event )
   group:insert(title)
   
  -- local content = display.newText( "Goal: " .. currentQuest.description, 250, 75, globals.Aaargh, 26 )
-  local content = display.newText( "Goal: " .. currentQuest.description, 165, 360, display.contentWidth-60, 400, globals.Aaargh, 18 )
+  local content = display.newText( "Goal: " .. currentQuest.description, 165, 380, display.contentWidth-60, 400, globals.Aaargh, 18 )
   content:setFillColor(0,0,0)
   group:insert(content)
   
-  local reward = display.newText( "Reward: 0 Indoor, 4 Outdoor, 0 Knowledge", 250, 75, globals.Aaargh, 18 )
+  local reward = display.newText( "Reward: \n0 Indoor\n4 Outdoor\n0 Knowledge", 250, 75, globals.Aaargh, 18 )
   reward:setFillColor(0,0,0)
   reward.x = 165
-  reward.y = 270
+  reward.y = 330
   group:insert(reward)
   local function acceptTap ()
 	globals.questList[currentQuest.id].started = true
@@ -66,14 +66,14 @@ function scene:createScene( event )
 	  local accept = display.newText( "Accept", 250, 75, globals.Archistico, 26 )
 	  accept:setFillColor(0,0,0)
 	  accept.x = 165
-	  accept.y = 310
+	  accept.y = 160
 	  accept:addEventListener( "tap", acceptTap )
 	  group:insert(accept)
   else
 	  local complete = display.newText( "Complete Task!", 250, 75, globals.Archistico, 26 )
 	  complete:setFillColor(0,0,0)
 	  complete.x = 165
-	  complete.y = 310
+	  complete.y = 160
 	  complete:addEventListener( "tap", completeTap )
 	  group:insert(complete)
 	end

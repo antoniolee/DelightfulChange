@@ -47,10 +47,10 @@ function scene:createScene( event )
   end
 
   local scrollView = widget.newScrollView{
-    y = display.contentCenterY,
+    y = display.contentCenterY+20,
     x = display.contentCenterX,
     width =display.contentWidth,
-    height = display.contentHeight,
+    height = display.contentHeight-20,
 	friction = 0,
 	--isLocked = true,
     --hideBackground = true,
@@ -58,6 +58,36 @@ function scene:createScene( event )
     listener = scrollListener
   }
   group:insert(scrollView)
+  
+  local indoor = display.newText( "Indoor: 50", 250, 75, globals.Aaargh, 14 )
+  indoor:setFillColor(0,0.392157,0)
+  indoor.x = display.contentCenterX-85
+  indoor.y = 15
+  group:insert(indoor)
+  
+  local outside = display.newText( "Outside: 50", 250, 75, globals.Aaargh, 14 )
+  outside:setFillColor(0,0.392157,0)
+  outside.x = display.contentCenterX
+  outside.y = 15
+  group:insert(outside)
+  
+  local knowledge = display.newText( "Knowledge: 50", 250, 75, globals.Aaargh, 14 )
+  knowledge:setFillColor(0,0.392157,0)
+  knowledge.x = display.contentCenterX+100
+  knowledge.y = 15
+  group:insert(knowledge)
+  
+  local function onTapBack( event )
+    storyboard.removeScene( scene )
+    storyboard.gotoScene( "scenes.HomeScreen",{ effect = "fade", time = 500,})
+  end
+  
+  local back = display.newImageRect( "images/leftArrow.png", 20, 20 )
+  back.x = 15
+  back.y = 15
+  back:addEventListener("tap", onTapBack)
+  group:insert(back)
+  
   local land = {}
   local player
   local function moveTo( event )

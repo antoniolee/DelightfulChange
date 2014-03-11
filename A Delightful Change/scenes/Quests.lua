@@ -88,17 +88,18 @@ function scene:createScene( event )
 		  questToDo[i]:addEventListener( "tap", questTap )
 	end
 
-  local quests = display.newText( "Quests!", 158, 54 )
-  quests.x = 161
-  quests.y = 387
-  group:insert(quests)
+  local returnBut = display.newText( "Return", 158, 54, globals.Aaargh, 36 )
+  returnBut:setFillColor(0.2509,0.7529,0.7960)
+  returnBut.x = 161
+  returnBut.y = 387
+  group:insert(returnBut)
 
-  local function onTapQuests( event )
+  local function onTapReturn( event )
     storyboard.removeScene( scene )
-    storyboard.gotoScene( "scenes.Quests",{ effect = "fade", time = 500,})
+    storyboard.gotoScene( "scenes.HomeScreen",{ effect = "fade", time = 500,})
   end
 
-  quests:addEventListener("tap", onTapQuests)
+  returnBut:addEventListener("tap", onTapReturn)
 
 end
  
