@@ -20,6 +20,7 @@ storyboard.removeAll()
  
 -- Called when the scene's view does not exist:
 function scene:createScene( event )
+  local outsideScore =50
   local group = self.view
   
   local function questTap ( event )
@@ -65,7 +66,7 @@ function scene:createScene( event )
   indoor.y = 15
   group:insert(indoor)
   
-  local outside = display.newText( "Outside: 50", 250, 75, globals.Aaargh, 14 )
+  local outside = display.newText( "Outside: "..outsideScore, 250, 75, globals.Aaargh, 14 )
   outside:setFillColor(0,0.392157,0)
   outside.x = display.contentCenterX
   outside.y = 15
@@ -102,23 +103,43 @@ function scene:createScene( event )
 	while myY<600 do
 		local myX = 25
 		while myX<600 do
-		  land[n] = display.newRect( myX, myY, 50, 50 )
+		  land[n] = display.newImageRect( "images/grass.png", 50, 50 )
+		  land[n].x = myX
+		  land[n].y = myY
 		  scrollView:insert( land[n] )
 		  myX=myX+50
 		  local random1 = math.random(0, 255)/255
 		  local random2 = math.random(0, 255)/255
 		  local random3 = math.random(0, 255)/255
-		  land[n]:setFillColor(random1,random2,random3)
+		  --land[n]:setFillColor(random1,random2,random3)
 		  land[n]:addEventListener( "tap", moveTo )
 		  n = n +1
 		end
 		myY=myY+50
 		--i = i +1
 	end
-	player = display.newRect( 325, 325, 50, 50 )
-	player:setFillColor(0,0,0)
+	player = display.newImageRect( "images/avatar.png", 50, 50 )
+	player.x = 325
+	player.y = 325
 	scrollView:insert( player )
 	
+	local function goToBuildMenu ()
+		storyboard.showOverlay( "scenes.buildOverlay",{ effect = "fade", time = 500})
+	end
+	
+	function build (buildName)
+		--myPlayer = event.target
+		local  myY = player.y
+		local  myX = player.x
+		local buildItem = display.newImageRect( "images/" .. buildName .. ".png", 50, 50 )
+		buildItem.x = myX
+		buildItem.y = myY
+		outsideScore = outsideScore - 2
+		outside.text = "Outside: "..outsideScore
+		scrollView:scrollToPosition( { x = (myX - display.contentWidth/2)*-1, y = (myY -display.contentHeight/2)*-1, time = 0} )
+		scrollView:insert( buildItem )
+	end
+	player:addEventListener( "tap", goToBuildMenu )
 --[[
   local quests = display.newText( "Quests!", 158, 54 )
   quests.x = 161
@@ -143,7 +164,7 @@ end
 -- Called immediately after scene has moved onscreen:
 function scene:enterScene( event )
   local group = self.view
- 
+  
 end
  
 -- Called when scene is about to move offscreen:

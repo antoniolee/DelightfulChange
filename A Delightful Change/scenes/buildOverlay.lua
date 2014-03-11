@@ -1,11 +1,13 @@
----------------------------------------------------------------------------------
--- Home Screen
+ ---------------------------------------------------------------------------------
+-- Quests Screen
 -- Scene notes go here
 ---------------------------------------------------------------------------------
  
 local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
+local widget = require( "widget" )
 local globals = require("classes.globals")
+require("classes.myQuests")
  
 -- Clear previous scene
 storyboard.removeAll()
@@ -19,50 +21,39 @@ storyboard.removeAll()
 -- Called when the scene's view does not exist:
 function scene:createScene( event )
   local group = self.view
-  print(globals.Archistico)
-  local title1 = display.newText( "A", 250, 75, globals.Archistico, 48 )
-  title1:setFillColor(0,0.392157,0)
-  title1.x = 159
-  title1.y = 33
-  group:insert(title1)
+  local bkg = display.newRect( centerX, centerY, display.contentWidth, display.contentHeight )
+  bkg:setFillColor( gray )
+  bkg.alpha = .5
+  group:insert (bkg)
+
+  bkg:addEventListener("touch", function() return true end)
+  bkg:addEventListener("tap", function() return true end)
   
-  local title2 = display.newText( "Delightful", 250, 75, globals.Archistico, 48 )
-  title2:setFillColor(0,0.392157,0)
-  title2.x = 159
-  title2.y = 73
-  group:insert(title2)
-
-  local title3 = display.newText( "Change!", 250, 75, globals.Archistico, 48 )
-  title3:setFillColor(0,0.392157,0)
-  title3.x = 159
-  title3.y = 113
-  group:insert(title3)
+  local tree = display.newImageRect( "images/tree.png", 100, 100 )
+  tree.x = centerX -75
+  tree.y = 150
+  group:insert( tree )
+		
+  local water = display.newImageRect( "images/water.jpg", 100, 100 )
+  water.x = centerX +75
+  water.y = 150
+  group:insert( water )
   
-  local world = display.newImageRect( "images/world.png", 150, 150 )
-  world.x = 162
-  world.y = 230
-  group:insert(world)
-
-  local quests = display.newText( "Quests!", 158, 54, globals.Aaargh, 36 )
-  quests:setFillColor(0.2509,0.7529,0.7960)
-  quests.x = 161
-  quests.y = 387
-  group:insert(quests)
-
-  local function onTapQuests( event )
-    storyboard.removeScene( scene )
-    storyboard.gotoScene( "scenes.Quests",{ effect = "fade", time = 500,})
+  local function tapTree ()
+	build("tree")
+	storyboard.hideOverlay( "fade", 500)
   end
-
-  quests:addEventListener("tap", onTapQuests)
-
-  local function onTapWorld( event )
-    storyboard.removeScene( scene )
-    storyboard.gotoScene( "scenes.InGame",{ effect = "fade", time = 500,})
+  tree:addEventListener("tap", tapTree)
+  
+  local function tapWater ()
+	build("water")
+	storyboard.hideOverlay( "fade", 500)
   end
+  water:addEventListener("tap", tapWater)
   
-  world:addEventListener("tap", onTapWorld)
   
+ -- local content = display.newText( "Goal: " .. currentQuest.description, 250, 75, globals.Aaargh, 26 )
+ 
 end
  
 -- Called BEFORE scene has moved onscreen:
