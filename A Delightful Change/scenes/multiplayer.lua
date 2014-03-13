@@ -1,11 +1,13 @@
----------------------------------------------------------------------------------
--- Home Screen
+ ---------------------------------------------------------------------------------
+-- Multiplayer Screen
 -- Scene notes go here
 ---------------------------------------------------------------------------------
  
 local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
+local widget = require( "widget" )
 local globals = require("classes.globals")
+require("classes.myQuests")
  
 -- Clear previous scene
 storyboard.removeAll()
@@ -19,62 +21,88 @@ storyboard.removeAll()
 -- Called when the scene's view does not exist:
 function scene:createScene( event )
   local group = self.view
-  print(globals.Archistico)
-  local title1 = display.newText( "A", 250, 75, globals.Archistico, 48 )
-  title1:setFillColor(0,0.392157,0)
-  title1.x = 159
-  title1.y = 33
-  group:insert(title1)
+  local titleOptions = {
+    text = "Friends",
+    x = 160,
+    y = 70,   
+    font = globals.Archistico,
+    fontSize = 48
+  }
+  local title = display.newText(titleOptions)
+  title:setFillColor(0,0.392157,0)
+  group:insert(title)
   
-  local title2 = display.newText( "Delightful", 250, 75, globals.Archistico, 48 )
-  title2:setFillColor(0,0.392157,0)
-  title2.x = 159
-  title2.y = 73
-  group:insert(title2)
-
-  local title3 = display.newText( "Change!", 250, 75, globals.Archistico, 48 )
-  title3:setFillColor(0,0.392157,0)
-  title3.x = 159
-  title3.y = 113
-  group:insert(title3)
+  local indoor = display.newText( "Indoor: 50", 250, 75, globals.Aaargh, 14 )
+  indoor:setFillColor(0,0.392157,0)
+  indoor.x = display.contentCenterX-85
+  indoor.y = 15
+  group:insert(indoor)
   
-  local world = display.newImageRect( "images/world.png", 150, 150 )
-  world.x = 162
-  world.y = 230
-  group:insert(world)
-
-  local quests = display.newText( "Quests!", 158, 54, globals.Aaargh, 36 )
-  quests:setFillColor(0.2509,0.7529,0.7960)
-  quests.x = 160
-  quests.y = 360
-  group:insert(quests)
-
-  local multiplayer = display.newText( "Multiplayer", 158, 54, globals.Aaargh, 36 )
-  multiplayer:setFillColor(0.2509,0.7529,0.7960)
-  multiplayer.x = 160
-  multiplayer.y = 420
-  group:insert(multiplayer)
-
-  local function onTapQuests( event )
+  local outside = display.newText( "Outside: 50", 250, 75, globals.Aaargh, 14 )
+  outside:setFillColor(0,0.392157,0)
+  outside.x = display.contentCenterX
+  outside.y = 15
+  group:insert(outside)
+  
+  local knowledge = display.newText( "Knowledge: 50", 250, 75, globals.Aaargh, 14 )
+  knowledge:setFillColor(0,0.392157,0)
+  knowledge.x = display.contentCenterX+100
+  knowledge.y = 15
+  group:insert(knowledge)
+  
+  local function onTapBack( event )
     storyboard.removeScene( scene )
-    storyboard.gotoScene( "scenes.Quests",{ effect = "fade", time = 500,})
-  end
-
-  local function onTapMultiplayer( event )
-    storyboard.removeScene( scene )
-    storyboard.gotoScene( "scenes.multiplayer",{ effect = "fade", time = 500,})
-  end
-
-  quests:addEventListener("tap", onTapQuests)
-  multiplayer:addEventListener("tap", onTapMultiplayer)
-
-  local function onTapWorld( event )
-    storyboard.removeScene( scene )
-    storyboard.gotoScene( "scenes.InGame",{ effect = "fade", time = 500,})
+    storyboard.gotoScene( "scenes.HomeScreen",{ effect = "fade", time = 500,})
   end
   
-  world:addEventListener("tap", onTapWorld)
+  local back = display.newImageRect( "images/leftArrow.png", 20, 20 )
+  back.x = 15
+  back.y = 15
+  back:addEventListener("tap", onTapBack)
+  group:insert(back)
   
+ local friend1 = display.newImageRect( "images/breakfast.png", 65, 65 )
+  friend1.x = 74
+  friend1.y = 164
+  group:insert(friend1)
+
+  local friend2 = display.newImageRect( "images/archer.png", 65, 65 )
+  friend2.x = 243
+  friend2.y = 164
+  group:insert(friend2)
+
+  local friend3 = display.newImageRect( "images/penguinknight1.png", 80, 80 )
+  friend3.x = 162
+  friend3.y = 159
+  group:insert(friend3)
+
+  local infoOptions = {
+    text = "This is penguin man, you're first buddy. You can visit his world and do cool things like plant trees!",
+    x = 160,
+    y = 305,   
+    font = globals.Aaargh,
+    fontSize = 14,
+    width = 256,
+  }  
+
+  local info = display.newText(infoOptions)
+  info:setFillColor(0,0.392157,0)
+  group:insert(info)
+
+  local friendName = display.newText( "Penguin Man", 250, 75, globals.Aaargh, 28 )
+  friendName:setFillColor(0,0.392157,0)
+  friendName.x = display.contentCenterX
+  friendName.y = 240
+  group:insert(friendName)
+
+
+  local function onTapReturn( event )
+    storyboard.removeScene( scene )
+    storyboard.gotoScene( "scenes.HomeScreen",{ effect = "fade", time = 500,})
+  end
+
+  --returnBut:addEventListener("tap", onTapReturn)
+
 end
  
 -- Called BEFORE scene has moved onscreen:
